@@ -1,12 +1,12 @@
-use std::net::{IpAddr, Ipv4Addr};
 use pnet;
-use pnet::datalink::Config;
 use pnet::datalink::channel;
+use pnet::datalink::Channel::Ethernet;
+use pnet::datalink::Config;
 use pnet::datalink::interfaces;
 use pnet::packet::ipv4::MutableIpv4Packet;
 use pnet::packet::tcp::{MutableTcpPacket, TcpFlags};
 use rand::Rng;
-use pnet::datalink::Channel::Ethernet;
+use std::net::Ipv4Addr;
 
 const IPV4_HEADER_LEN: usize = 20;
 const TCP_HEADER_LEN: usize = 32;
@@ -15,9 +15,9 @@ fn main() {
     let all_interfaces = interfaces();
 
     let default_interface = all_interfaces
-     .iter()
-     .find(|e| e.is_up() && !e.is_loopback() && !e.ips.is_empty())
-     .expect("Error while finding default interface.");
+        .iter()
+        .find(|e| e.is_up() && !e.is_loopback() && !e.ips.is_empty())
+        .expect("Error while finding default interface.");
     let (mut sender, _) = match channel(default_interface, Config::default()) {
         Ok(Ethernet(s, r)) => (s, r),  
         
